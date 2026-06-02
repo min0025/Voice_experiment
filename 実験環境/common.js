@@ -1,6 +1,6 @@
 // 共通設定
-const expname = "characteristic"; // 実験名（ファイル名に使う）
-const datapipe_experiment_id = "nX0ylBPTMR8A"; // DataPipeの実験ID（OSF保存用）
+const expname = "characteristic_voice"; // 実験名（ファイル名に使う）
+const datapipe_experiment_id = "S9gIeGgus6Lo"; // DataPipeの実験ID（OSF保存用）
 
 // 被験者ID（5桁ランダム）
 var participant_ID = Math.floor(Math.random() * 90000) + 10000;
