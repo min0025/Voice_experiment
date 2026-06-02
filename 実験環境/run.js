@@ -7,13 +7,13 @@ timeline.push(consent_form, gap); // 同意書を入れる
 timeline.push(worker_id_form, gap);
 
 // スクリーニング
-// timeline.push(screening, gap);
+timeline.push(screening, gap);
 
 // 音量調整
-// timeline.push(volume_adjustment, gap);
+timeline.push(volume_adjustment, gap);
 
 // スクリーニングの結果データを付与
-/* timeline.push({
+timeline.push({
   type: jsPsychCallFunction,
   func: function(){
     const data = jsPsych.data.get().filterCustom(function(trial){
@@ -25,7 +25,7 @@ timeline.push(worker_id_form, gap);
       screening_score: data.screening_score
     });
   }
-}); */
+}); 
 
 // 本実験へ進む
 timeline.push(gap, ...main_experiment());
