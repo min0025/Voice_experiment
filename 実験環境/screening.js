@@ -5,13 +5,14 @@ const scr_stimuli = [
   {name: "anti", file: "./assets/screening/tone_antiphase.wav"}
 ];
 
+// 参加者が本試行前に音量を合わせるための画面です。
 const volume_adjustment = {
   type: jsPsychHtmlButtonResponse,
   stimulus: `
     <h1>音量の調節</h1><br>
     <p style="font-size: 20px">ここでは、ご自身で音量調節を行ってもらいます。再生ボタンを押すと音声が流れます。</p>
     <p style="font-size: 20px"><U><b>「イヤホン」または「ヘッドホン」は装着したままで音声を聞き、ちょうどよいと思う音量に調節してください。</b></U></p>
-    <p style="font-size: 20px; margin-bottom: 35px"><b><u>音声は何回でも再生可能です</u></b>。</p>
+    <p style="font-size: 20px; margin-bottom: 35px"><u>音声は何回でも再生可能です</u>。</p>
     <div style="text-align: center; margin-bottom: 30px;">
       <button type="button" id="volumePlayBtn">再生</button>
       <audio id="volumeAudio" src="./assets/practice/VOICEACTRESS100_031.wav"></audio>
@@ -19,6 +20,7 @@ const volume_adjustment = {
     <p style="font-size: 18px;">音量調節が終わったら「次へ」を押してください。</p>
   `,
   choices: ["次へ"],
+  // 再生後だけ次へ進めるようにボタン状態を制御します。
   on_load: function(){
     const playBtn = document.getElementById("volumePlayBtn");
     const audio = document.getElementById("volumeAudio");
@@ -57,15 +59,16 @@ const volume_adjustment = {
 };
 
 // 1回分のスクリーニング本体
+// ヘッドホン装着を確認する6問のスクリーニング本体です。
 const screening_trial = {
   type: jsPsychHtmlButtonResponse,
   
   // 画面表示内容
   stimulus: `
     <h1>実験前の確認</h1><br>
-    <p style="font-size: 20px">本実験では<B><U>必ず「ヘッドホン」か「イヤホン」を装着してください</U></B></p>
+    <p style="font-size: 20px"><B><U>必ず「ヘッドホン」か「イヤホン」を装着してください</U></B></p>
     <p style="font-size: 20px">再生ボタンを押すと、3つの音が順番に再生されます</p>
-    <p style="font-size: 20px">3つの音の中で最も小さく聞こえた音について、<U>流れた順番</U>を選んでください</p>
+    <p style="font-size: 20px">3つの音の中で<b><u>最も小さく聞こえた音</u></b>について、<U><b>その音が何番目に流れたか</b></U>を選択してください</p>
     <p style="font-size: 20px; margin-bottom: 40px">この試行は6回行われます。</p>
     <hr>
     <div id="controls"></div>
@@ -74,6 +77,7 @@ const screening_trial = {
   `,
 
   choices: [],
+  // 音声の連続再生と回答UIの切り替えをまとめて管理します。
   on_load: function(){
 
     let current = 0; // 現在の試行番号
@@ -84,9 +88,11 @@ const screening_trial = {
     const nextBtn = document.getElementById("nextBtn"); // 次へボタンの要素
 
     // 音を順番に再生
+    // 3つの音を指定順で連続再生します。
     function playSequence(order, callback){
       let i = 0;
 
+      // 現在位置の音を1つ再生して次の音へ進めます。
       function playNext(){
         if(i >= order.length){
           callback();
@@ -116,6 +122,7 @@ const screening_trial = {
     }
 
     // UIの描画
+    // 各試行の画面を描画して正解位置も記録します。
     function render(){
       // 毎回シャッフルして順番を変える
       let order = jsPsych.randomization.shuffle([...scr_stimuli]);
@@ -226,16 +233,19 @@ const screening_trial = {
 };
 
 // スクリーニング失敗時の再確認画面
+// スクリーニング失敗時に装着状況を確認してもらう画面です。
 const screening_retry_notice = {
   type: jsPsychHtmlButtonResponse,
   stimulus: `
     <h1>装着状況の再確認</h1><br>
-    <p style="font-size: 20px"><b><u>「イヤホン」または「ヘッドホン」をきちんと装着していますか？</u></b>、必ず装着した上で参加してください。</p>
+    <p style="font-size: 20px"><b><u>「イヤホン」または「ヘッドホン」を装着した上で聴取してますか？</u></b></p>
+    <p style="font-size: 20px">必ず装着した上で参加してください。</p>
     <p style="font-size: 20px">最初からやり直します。</p>
   `,
   choices: ["最初から"]
 };
 
+// 直前の結果が不合格だった場合だけ再確認画面を表示します。
 const screening_retry_block = {
   timeline: [screening_retry_notice],
   conditional_function: function(){
@@ -245,6 +255,7 @@ const screening_retry_block = {
 };
 
 // スクリーニング全体構成
+// 合格するまでスクリーニング本体を繰り返す全体ブロックです。
 const screening = {
   timeline: [screening_trial, screening_retry_block],
   loop_function: function(data){
