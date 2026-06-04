@@ -13,13 +13,13 @@ function main_experiment() {
     practice_intermission,
     gap,
     // 練習用2試行です。
-     ...practice_trials,
+    //...practice_trials,
     gap,
     // 練習後に本試行前の再確認を行います。
     intermission,
     gap,
     // 本試行25音声分です。
-     ...trials_combined,
+    //...trials_combined,
     gap,
     // 実験後の属性回答です。
     demographics,
